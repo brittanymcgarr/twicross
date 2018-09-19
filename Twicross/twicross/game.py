@@ -70,13 +70,25 @@ class Board:
         self.board[x_coord][y_coord] = symbol
 
     def scanRow(self, y_coord):
-        pass
+        if y_coord < 0 or not self.dimensions or y_coord > self.dimensions[1]:
+            raise TypeError('Invalid Row index')
+
+        for count in range(0, self.dimensions[0]):
+            if self.image[y_coord][count] is not self.board[y_coord][count]:
+                return False
+        return True
 
     def scanCol(self, x_coord):
-        pass
+        if x_coord < 0 or not self.dimensions or x_coord > self.dimensions[0]:
+            raise TypeError('Invalid Column Index')
+
+        for count in range(0, self.dimensions[1]):
+            if self.image[count][x_coord] is not self.board[count][x_coord]:
+                return False
+        return True
 
     def checkWin(self):
-        pass
+        return self.board == self.image
 
 
 class Player:
