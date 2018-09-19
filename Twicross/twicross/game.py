@@ -3,6 +3,11 @@
 ## Basic Twilio Picross board and classes                                     ##
 ################################################################################
 
+import requests
+import json
+import time
+import datetime
+
 
 class Board:
     def __init__(self, filename):
@@ -66,8 +71,17 @@ class Board:
                 hint_col.append(hint_count)
             self.hints[1].append(hint_col)
 
-    def updateBoard(self, x_coord, y_coord, symbol):
-        self.board[x_coord][y_coord] = symbol
+    def updateBoard(self, x_coord, y_coord):
+        if x_coord < 0 or x_coord > self.dimensions[1]\
+                or y_coord < 0 or y_coord > self.dimensions[0]\
+                or self.board[y_coord][x_coord] == 'X':
+            return False
+
+        if self.image[y_coord][x_coord] == 'X':
+            self.board[y_coord][x_coord] = 'X'
+            return True
+
+        return False
 
     def scanRow(self, y_coord):
         if y_coord < 0 or not self.dimensions or y_coord > self.dimensions[1]:
@@ -107,3 +121,44 @@ class Player:
 
     def updateScore(self, score):
         self.score += score
+
+
+class Game:
+    def __init__(self):
+        self.players = {}
+        self.board = None
+        self.session_id = ''
+
+    def getBoard(self, filename, session=''):
+        self.board = Board(filename)
+
+        if not self.board:
+            return False
+
+        self.session_id = session
+
+    def playerMove(self, phone, body):
+        number = phone
+
+        if number not in self.players.keys():
+            self.players[number] = Player(name='', phone=number, game=self.session_id)
+
+        message = body.strip().lstrip()
+        message = message.split(',')
+        coords = []
+
+        for value in message:
+            try:
+                coords.append(int(value))
+            except TypeError:
+                raise ValueError('Player Message invalid')
+
+        if self.board.updateBoard(coords[1], coords[0]):
+            self.players[number].updateScore(1)
+
+        if self.board.scanRow(coords[1]):
+            self.players[number].updateScore(3)
+        if self.board.scanCol(coords[0]):
+            self.players[number].updateScore(3)
+        if self.board.checkWin():
+            self.players[number].updateScore(5)
