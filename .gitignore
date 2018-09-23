@@ -4,3 +4,4 @@
 projectnotes.txt
 venv
 __pycache__
+*.pyc

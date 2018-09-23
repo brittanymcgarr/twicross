@@ -128,6 +128,7 @@ class Game:
         self.players = {}
         self.board = None
         self.session_id = ''
+        self.log = []
 
     def getBoard(self, filename, session=''):
         self.board = Board(filename)
@@ -136,6 +137,7 @@ class Game:
             return False
 
         self.session_id = session
+        self.log.append('Uploaded the board: '.format(filename))
 
     def playerMove(self, phone, body):
         number = phone
@@ -155,10 +157,18 @@ class Game:
 
         if self.board.updateBoard(coords[1], coords[0]):
             self.players[number].updateScore(1)
+            self.log.append('{} earned a point!'.format(self.players[number].name))
+        else:
+            self.players[number].updateScore(-1)
+            self.log.append('{} has guess poorly and lost a point'.format(self.players[number].name))
 
         if self.board.scanRow(coords[1]):
             self.players[number].updateScore(3)
+            self.log.append('{} completed the row and gains 3 points!'.format(self.players[number].name))
         if self.board.scanCol(coords[0]):
             self.players[number].updateScore(3)
+            self.log.append('{} completed the column and gains 3 points!'.format(self.players[number].name))
         if self.board.checkWin():
             self.players[number].updateScore(5)
+            self.log.append('{} finished the puzzel and gains 5 points!!!'.format(self.players[number].name))
+            self.log.append('Congratulations!')
