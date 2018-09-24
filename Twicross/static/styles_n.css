@@ -1,0 +1,33 @@
+.board {
+    width: 50%;
+    align-content: center;
+    border: 5px solid gray;
+    font-size: 23px;
+}
+
+.board th {
+    border-left: 1px solid #86989B;
+}
+
+.board th:last-child {
+    border-right: 1px solid #86989B;
+}
+
+.board tr:nth-child(5n) {
+    border-bottom: 2px solid red;
+}
+
+.board td {
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    padding: 0;
+    margin: 0;
+}
+
+.board td:nth-child(6) {
+    border-right: 2px solid red;
+}
+
+.board td:nth-child(5n+6) {
+    border-right: 2px solid red;
+}

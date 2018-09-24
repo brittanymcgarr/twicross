@@ -6,12 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Twicross</title>
+    <head>
+        <link rel="stylesheet" href="/static/styles_n.css">
+    </head>
 </head>
 
 <body>
     <h1>Twilio Picross</h1>
+
     <br>
-    <h3>Now, with more Twilio</h3>
+    <div class="board">
+        <table>
+            <!-- Column Hints -->
+            <tr>
+                <th>
+                    <!-- Blank bump -->
+                </th>
+
+                {% for col in range(game.board.dimensions[1]) %}
+                    <th width="10em" height="50em">
+                        {{ game.board.hints[1][col]|join(' ') }}
+                    </th>
+                {% endfor %}
+            </tr>
+
+            <!-- Board Rows -->
+            {% for row in range(game.board.dimensions[0]) %}
+                <tr>
+                    <!-- Row Hints Column -->
+                    <td class="row-hints">
+                        {{ game.board.hints[0][row]|join(' ') }}
+                    </td>
+
+                    <!-- Board Pieces -->
+                    {% for col in range(game.board.dimensions[1]) %}
+                        <td class="board-piece"
+                            {% if game.board.board[row][col] == 'X' %}bgcolor="black"{% endif %}>
+                            {{ game.board.board[row][col] }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="chat">
+        <p>
+
+        </p>
+    </div>
 </body>
 
 </html>

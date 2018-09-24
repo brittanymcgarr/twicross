@@ -4,7 +4,8 @@
 ################################################################################
 
 from flask import Flask, render_template, request
-import requests
+from twilio import twiml
+
 from twicross.game import Game
 
 # initialize the Flask app
@@ -20,15 +21,22 @@ def index():
 
 
 # play a coordinate
-@app.route('/coord', methods=['GET', 'POST'])
+@app.route('/coord', methods=['POST'])
 def play_coord():
-    number = request.values.get('From', None)
-    number = number[2:]
-    body = request.values.get('Body', None)
+    number = request.form['From']
+    body = request.form['Body']
 
     try:
-        game.playerMove(number, body)
-        return render_template('index.html', game=game)
+        score = game.playerMove(number, body)
+        resp = twiml.Response()
+
+        if score > 0:
+            message = "You found a piece. Score is now {}".format(score)
+        else:
+            message = "You didn't find a piece. Score is now {}".format(score)
+
+        resp.message(message)
+        return str(resp)
     except ValueError:
         return
 

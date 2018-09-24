@@ -121,6 +121,7 @@ class Player:
 
     def updateScore(self, score):
         self.score += score
+        return score
 
 
 class Game:
@@ -156,19 +157,21 @@ class Game:
                 raise ValueError('Player Message invalid')
 
         if self.board.updateBoard(coords[1], coords[0]):
-            self.players[number].updateScore(1)
+            score = self.players[number].updateScore(1)
             self.log.append('{} earned a point!'.format(self.players[number].name))
         else:
-            self.players[number].updateScore(-1)
+            score = self.players[number].updateScore(-1)
             self.log.append('{} has guess poorly and lost a point'.format(self.players[number].name))
 
         if self.board.scanRow(coords[1]):
-            self.players[number].updateScore(3)
+            score = self.players[number].updateScore(3)
             self.log.append('{} completed the row and gains 3 points!'.format(self.players[number].name))
         if self.board.scanCol(coords[0]):
-            self.players[number].updateScore(3)
+            score = self.players[number].updateScore(3)
             self.log.append('{} completed the column and gains 3 points!'.format(self.players[number].name))
         if self.board.checkWin():
-            self.players[number].updateScore(5)
+            score = self.players[number].updateScore(5)
             self.log.append('{} finished the puzzel and gains 5 points!!!'.format(self.players[number].name))
             self.log.append('Congratulations!')
+
+        return score
