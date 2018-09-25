@@ -5,49 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh" content="5">
     <title>Twicross</title>
     <head>
-        <link rel="stylesheet" href="/static/styles_n.css">
+        <link rel="stylesheet" href="/static/style.css">
     </head>
 </head>
 
 <body>
-    <h1>Twilio Picross</h1>
+    <h1>Twicross</h1>
 
     <br>
-    <div class="board">
-        <table>
-            <!-- Column Hints -->
-            <tr>
-                <th>
-                    <!-- Blank bump -->
-                </th>
+    <div class="game-wrap">
 
-                {% for col in range(game.board.dimensions[1]) %}
-                    <th width="10em" height="50em">
-                        {{ game.board.hints[1][col]|join(' ') }}
-                    </th>
-                {% endfor %}
-            </tr>
-
-            <!-- Board Rows -->
-            {% for row in range(game.board.dimensions[0]) %}
+        <div class="board">
+            <table>
+                <!-- Column Hints -->
                 <tr>
-                    <!-- Row Hints Column -->
-                    <td class="row-hints">
-                        {{ game.board.hints[0][row]|join(' ') }}
-                    </td>
+                    <th>
+                        <!-- Blank bump -->
+                    </th>
 
-                    <!-- Board Pieces -->
                     {% for col in range(game.board.dimensions[1]) %}
-                        <td class="board-piece"
-                            {% if game.board.board[row][col] == 'X' %}bgcolor="black"{% endif %}>
-                            {{ game.board.board[row][col] }}
-                        </td>
+                        <th width="10em" height="50em">
+                            {{ game.board.hints[1][col]|join(' ') }}
+                        </th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </table>
+
+                <!-- Board Rows -->
+                {% for row in range(game.board.dimensions[0]) %}
+                    <tr>
+                        <!-- Row Hints Column -->
+                        <td class="row-hints">
+                            {{ game.board.hints[0][row]|join(' ') }}
+                        </td>
+
+                        <!-- Board Pieces -->
+                        {% for col in range(game.board.dimensions[1]) %}
+                            <td class="board-piece"
+                                {% if game.board.board[row][col] == 'X' %}bgcolor="black"{% endif %}>
+                                {{ game.board.board[row][col] }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="score-card">
+            <div class="phone">
+                <h1>Text (415) 802-0474</h1>
+                <br>
+                <h1><b>(0-14),(0-14)</b></h1>
+            </div>
+            <div class="scores">
+                <br>
+                {% for player in game.players.keys() %}
+                    <h2>{{ game.players[player].score }}   {{ game.players[player].phone }}</h2>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
     <div class="chat">

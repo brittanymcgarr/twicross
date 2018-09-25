@@ -5,3 +5,5 @@ projectnotes.txt
 venv
 __pycache__
 *.pyc
+auth
+ngrok

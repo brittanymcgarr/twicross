@@ -1,8 +1,14 @@
+.game-wrap {
+    width: 99%;
+    display: inline-block;
+}
+
 .board {
     width: 50%;
     align-content: center;
     border: 5px solid gray;
     font-size: 23px;
+    float: left;
 }
 
 .board th {
@@ -30,4 +36,11 @@
 
 .board td:nth-child(5n+6) {
     border-right: 2px solid red;
+}
+
+.score-card {
+    width: 45%;
+    align-content: right;
+    border: 5px solid darkred;
+    float: right;
 }

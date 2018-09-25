@@ -3,11 +3,6 @@
 ## Basic Twilio Picross board and classes                                     ##
 ################################################################################
 
-import requests
-import json
-import time
-import datetime
-
 
 class Board:
     def __init__(self, filename):
@@ -18,10 +13,7 @@ class Board:
         self.loadBoard(filename)
 
     def loadBoard(self, filename):
-        try:
-            file = open(filename, 'r')
-        except FileNotFoundError:
-            return
+        file = open(filename, 'r')
 
         dimensions = file.readline()
         dimensions = dimensions.split(',')
@@ -73,15 +65,16 @@ class Board:
 
     def updateBoard(self, x_coord, y_coord):
         if x_coord < 0 or x_coord > self.dimensions[1]\
-                or y_coord < 0 or y_coord > self.dimensions[0]\
-                or self.board[y_coord][x_coord] == 'X':
-            return False
+                or y_coord < 0 or y_coord > self.dimensions[0]:
+            return '-'
 
+        if self.board[y_coord][x_coord] == 'X':
+            return 'x'
         if self.image[y_coord][x_coord] == 'X':
             self.board[y_coord][x_coord] = 'X'
-            return True
+            return 'X'
 
-        return False
+        return '-'
 
     def scanRow(self, y_coord):
         if y_coord < 0 or not self.dimensions or y_coord > self.dimensions[1]:
@@ -121,17 +114,19 @@ class Player:
 
     def updateScore(self, score):
         self.score += score
-        return score
+        return self.score
 
 
 class Game:
     def __init__(self):
         self.players = {}
         self.board = None
+        self.file = None
         self.session_id = ''
         self.log = []
 
     def getBoard(self, filename, session=''):
+        self.file = filename
         self.board = Board(filename)
 
         if not self.board:
@@ -156,22 +151,31 @@ class Game:
             except TypeError:
                 raise ValueError('Player Message invalid')
 
-        if self.board.updateBoard(coords[1], coords[0]):
-            score = self.players[number].updateScore(1)
-            self.log.append('{} earned a point!'.format(self.players[number].name))
-        else:
-            score = self.players[number].updateScore(-1)
-            self.log.append('{} has guess poorly and lost a point'.format(self.players[number].name))
+        update_piece = self.board.updateBoard(coords[1], coords[0])
+        update_score = 0
 
-        if self.board.scanRow(coords[1]):
-            score = self.players[number].updateScore(3)
-            self.log.append('{} completed the row and gains 3 points!'.format(self.players[number].name))
-        if self.board.scanCol(coords[0]):
-            score = self.players[number].updateScore(3)
-            self.log.append('{} completed the column and gains 3 points!'.format(self.players[number].name))
-        if self.board.checkWin():
-            score = self.players[number].updateScore(5)
-            self.log.append('{} finished the puzzel and gains 5 points!!!'.format(self.players[number].name))
-            self.log.append('Congratulations!')
+        if update_piece == 'X':
+            update_score = 1
+        elif update_piece == '-':
+            update_score = -1
+
+        score = self.players[number].updateScore(update_score)
+
+        if update_piece == 'X':
+            if self.board.scanRow(coords[1]):
+                score = self.players[number].updateScore(3)
+                self.log.append('{} completed the row and gains 3 points!'.format(self.players[number].name))
+            if self.board.scanCol(coords[0]):
+                score = self.players[number].updateScore(3)
+                self.log.append('{} completed the column and gains 3 points!'.format(self.players[number].name))
+            if self.board.checkWin():
+                score = self.players[number].updateScore(5)
+                self.log.append('{} finished the puzzel and gains 5 points!!!'.format(self.players[number].name))
+                self.log.append('Congratulations!')
 
         return score
+
+    def resetGame(self):
+        self.board = Board(self.file)
+        self.players = {}
+        self.log = []
