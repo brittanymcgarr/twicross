@@ -1,0 +1,23 @@
+{"sid": "SMxxxxxxxxxxxxxxx",
+ "date_created": "Thu, 09 Aug 2018 17:26:08 +0000",
+ "date_updated": "Thu, 09 Aug 2018 17:26:08 +0000",
+ "date_sent": null,
+ "account_sid": "ACxxxxxxxxxxxxxxxx",
+ "to": "+15558675310",
+ "from": "+15017122661",
+ "messaging_service_sid": null,
+ "body": "This is the ship that made the Kessel Run in fourteen parsecs?",
+ "status": "queued",
+ "num_segments": "1",
+ "num_media": "0",
+ "direction": "outbound-api",
+ "api_version": "2010-04-01",
+ "price": null,
+ "price_unit": "USD",
+ "error_code": null,
+ "error_message": null,
+ "uri": "/2010-04-01/Accounts/ACxxxxxxxxx/Messages/SMxxxxxxxxxxxx.json",
+ "subresource_uris": {
+     "media": null
+ }
+}
