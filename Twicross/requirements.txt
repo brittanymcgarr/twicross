@@ -17,7 +17,7 @@ Jinja2==2.10
 MarkupSafe==1.0
 monotonic==1.5
 pycparser==2.19
-PyJWT==1.6.4
+PyJWT==2.4.0
 pyOpenSSL==18.0.0
 python-dateutil==1.5
 python-engineio==2.2.0
